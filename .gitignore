@@ -1,0 +1,16 @@
+.DS_Store
+node_modules/
+npm-debug.log
+webpack/test/unit/coverage
+webpack/test/e2e/reports
+selenium-debug.log
+
+# Rails
+/.bundle
+/db/*.sqlite3
+/db/*.sqlite3-journal
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+.byebug_history
