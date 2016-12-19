@@ -1,22 +1,17 @@
 <template>
   <div id="app">
-    <a href="https://http://rubyonrails.org/" target="_blank" title="Rails">
-      <img src="./assets/vue.png" height="50">
-    </a>
-    <a href="https://vuejs.org" target="_blank" title="Vue">
-      <img src="./assets/rails.svg" height="50">
-    </a>
-    <hello></hello>
+    <h1>Pong</h1>
+    <pong-table></pong-table>
   </div>
 </template>
 
 <script>
-import Hello from './components/Hello'
+import Table from './components/Table'
 
 export default {
   name: 'app',
   components: {
-    Hello
+    'pong-table': Table
   }
 }
 </script>
@@ -26,8 +21,7 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  padding: 15px;
 }
 </style>
