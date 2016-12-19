@@ -1,13 +1,13 @@
 <template>
-  <div class="table">
+  <div class="table" @mousemove="move">
     <div class="net"></div>
     <div class="scores">
       <span class="one">{{ scores[0] }}</span>
       <span class="two">{{ scores[1] }}</span>
     </div>
-    <paddle position="left"></paddle>
-    <paddle position="right"></paddle>
-    <ball></ball>
+    <paddle position="left" :paddle="leftPaddle"></paddle>
+    <paddle position="right" :paddle="rightPaddle"></paddle>
+    <ball :leftPaddle="leftPaddle" :rightPaddle="rightPaddle"></ball>
   </div>
 </template>
 
@@ -19,12 +19,51 @@ export default {
   name: 'table',
   data () {
     return {
-      scores: [8, 10]
+      moveId: null,
+      scores: [0, 0],
+      leftPaddle: {
+        y: 200
+      },
+      rightPaddle: {
+        y: 200
+      }
     }
+  },
+  created () {
+    window.addEventListener('keydown', this.move)
+    window.addEventListener('keyup', this.stop)
+  },
+  destroyed () {
+    window.removeEventListener('keydown', this.move)
   },
   components: {
     Ball,
     Paddle
+  },
+  methods: {
+    move (e) {
+      e.preventDefault()
+      switch (e.keyCode) {
+        case 38:
+          if (this.leftPaddle.y < 400) {
+            this.leftPaddle.y += 20
+          }
+          break
+        case 40:
+          if (this.leftPaddle.y > 0) {
+            this.leftPaddle.y -= 20
+          }
+          break
+      }
+    },
+    score (paddle) {
+      console.log('paddle ' + paddle + ' scored')
+      if (paddle === 'left') {
+        this.$set(this.scores, 0, this.scores[0] + 1)
+      } else {
+        this.$set(this.scores, 1, this.scores[1] + 1)
+      }
+    }
   }
 }
 </script>
