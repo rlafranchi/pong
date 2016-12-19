@@ -36,6 +36,8 @@ export default {
   width: 650px;
   height: 480px;
   background-color: #000;
+  font-family: monospace;
+  font-weight: bold;
 }
 
 .net {
@@ -58,6 +60,7 @@ export default {
   right: 325px;
   margin-right: 15px;
 }
+
 .scores .two {
   position: absolute;
   left: 325px;
