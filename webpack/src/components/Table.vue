@@ -1,5 +1,10 @@
 <template>
   <div class="table">
+    <div class="net"></div>
+    <div class="scores">
+      <span class="one">{{ scores[0] }}</span>
+      <span class="two">{{ scores[1] }}</span>
+    </div>
     <paddle position="left"></paddle>
     <paddle position="right"></paddle>
     <ball></ball>
@@ -14,6 +19,7 @@ export default {
   name: 'table',
   data () {
     return {
+      scores: [8, 10]
     }
   },
   components: {
@@ -30,5 +36,31 @@ export default {
   width: 650px;
   height: 480px;
   background-color: #000;
+}
+
+.net {
+  width: 0px;
+  border: 4px dotted #fff;
+  height: 480px;
+  margin-left: 320px;
+}
+
+.scores {
+  position: absolute;
+  width: 100%;
+  top: 10px;
+  color: #fff !important;
+  font-size: 48px;
+}
+
+.scores .one {
+  position: absolute;
+  right: 325px;
+  margin-right: 15px;
+}
+.scores .two {
+  position: absolute;
+  left: 325px;
+  margin-left: 15px;
 }
 </style>
