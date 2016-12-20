@@ -14,3 +14,5 @@ selenium-debug.log
 !/log/.keep
 !/tmp/.keep
 .byebug_history
+
+*.swp

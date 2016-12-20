@@ -17,19 +17,19 @@ export default {
 </script>
 
 <style scoped>
-.paddle {
-  background-color: #fff;
-  position: absolute;
-  width: 15px;
-  height: 80px;
-}
+  .paddle {
+    background-color: #fff;
+    position: absolute;
+    width: 15px;
+    height: 80px;
+  }
 
-.paddle.left {
-  margin-left: 30px;
-}
+  .paddle.left {
+    margin-left: 30px;
+  }
 
-.paddle.right {
-  margin-right: 30px;
-  right: 0;
-}
+  .paddle.right {
+    margin-right: 30px;
+    right: 0;
+  }
 </style>

@@ -21,19 +21,17 @@ export default {
   data () {
     return {
       intervalId: null,
-      nextHit: null,
-      x: 500,
-      y: 400,
+      nextHit: 'left',
+      x: 318,
+      y: 232,
       direction: {}
     }
   },
   methods: {
     serve () {
-      this.nextHit = this.leftPaddle
-      this.direction.x = -1
+      this.direction.x = this.nextHit === 'left' ? -1 : 1
       this.direction.y = _.sample(VALID_SLOPES)
-      var coinFlip = _.sample([true, false])
-      if (coinFlip) {
+      if (Math.random() > 0.5) {
         this.direction.y = -this.direction.y
       }
       var that = this
@@ -48,15 +46,15 @@ export default {
       if (this.pointScored()) {
         window.clearInterval(this.intervalId)
         console.log('Point Scored')
-        // right scored
-        if (this.x <= 0) {
-          this.$parent.score('right')
+        this.tally()
+        if (this.$parent.gameOver()) {
+          console.log('Game Over')
+          this.$destroy
         } else {
-          this.$parent.score('left')
+          this.x = 318
+          this.y = 232
+          this.serve()
         }
-        this.x = 500
-        this.y = 400
-        this.serve()
       }
 
       // upper wall
@@ -70,32 +68,31 @@ export default {
         this.direction.y = -this.direction.y
       }
       // left paddle
-      if (nextX <= 45 && this.x > 45) {
-        if (this.willHit()) {
-          this.x = 45
-          this.direction.x = 1
-          this.nextHit = this.rightPaddle
-        }
+      if (nextX <= 45 && this.x > 45 && this.willHit()) {
+        this.direction.x = 1
+        this.nextHit = 'right'
       }
       // right paddle
-      if (nextX >= 590 && this.x < 590) {
-        if (this.willHit()) {
-          this.x = 590
-          this.direction.x = -1
-          this.nextHit = this.leftPaddle
-        }
+      if (nextX >= 590 && this.x < 590 && this.willHit()) {
+        this.direction.x = -1
+        this.nextHit = 'left'
       }
 
       this.x += this.direction.x
       this.y += this.direction.y
     },
     willHit () {
-      var upperPaddle = this.nextHit.y + 95
+      var nextPaddle = this.nextHit === 'left' ? this.leftPaddle : this.rightPaddle
+      var upperPaddle = nextPaddle.y + 95
       var topOf = this.y + 15
-      return topOf >= this.nextHit.y && topOf <= upperPaddle
+      return topOf >= nextPaddle.y && topOf <= upperPaddle
     },
     pointScored () {
-      return this.x <= 0 || this.x >= 650
+      return this.x <= -15 || this.x >= 650
+    },
+    tally () {
+      this.nextHit = this.nextHit === 'left' ? 'right' : 'left'
+      this.$parent.score(this.nextHit)
     }
   }
 }

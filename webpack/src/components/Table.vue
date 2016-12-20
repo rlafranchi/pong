@@ -31,10 +31,6 @@ export default {
   },
   created () {
     window.addEventListener('keydown', this.move)
-    window.addEventListener('keyup', this.stop)
-  },
-  destroyed () {
-    window.removeEventListener('keydown', this.move)
   },
   components: {
     Ball,
@@ -47,11 +43,13 @@ export default {
         case 38:
           if (this.leftPaddle.y < 400) {
             this.leftPaddle.y += 20
+            this.rightPaddle.y += 20
           }
           break
         case 40:
           if (this.leftPaddle.y > 0) {
             this.leftPaddle.y -= 20
+            this.rightPaddle.y -= 20
           }
           break
       }
@@ -63,6 +61,9 @@ export default {
       } else {
         this.$set(this.scores, 1, this.scores[1] + 1)
       }
+    },
+    gameOver () {
+      return this.scores[0] === 10 || this.scores[1] === 10
     }
   }
 }
