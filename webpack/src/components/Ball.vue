@@ -55,37 +55,41 @@ export default {
           this.y = 232
           this.serve()
         }
-      }
-
-      // upper wall
-      if (nextY >= 465) {
-        this.y = 465
-        this.direction.y = -this.direction.y
-      }
-      // lower wall
-      if (nextY <= 0) {
-        this.y = 0
-        this.direction.y = -this.direction.y
-      }
-      // left paddle
-      if (nextX <= 45 && this.x > 45 && this.willHit()) {
-        this.direction.x = 1
-        this.nextHit = 'right'
-      }
-      // right paddle
-      if (nextX >= 590 && this.x < 590 && this.willHit()) {
-        this.direction.x = -1
-        this.nextHit = 'left'
+      } else {
+        // upper wall
+        if (nextY >= 465) {
+          this.y = 465
+          this.direction.y = -this.direction.y
+        }
+        // lower wall
+        if (nextY <= 0) {
+          this.y = 0
+          this.direction.y = -this.direction.y
+        }
+        // left paddle
+        if (nextX <= 45 && this.x > 45 && this.willHit()) {
+          this.direction.x = 1
+          this.deflect()
+          this.nextHit = 'right'
+        }
+        // right paddle
+        if (nextX >= 590 && this.x < 590 && this.willHit()) {
+          this.direction.x = -1
+          this.deflect()
+          this.nextHit = 'left'
+        }
       }
 
       this.x += this.direction.x
       this.y += this.direction.y
     },
     willHit () {
-      var nextPaddle = this.nextHit === 'left' ? this.leftPaddle : this.rightPaddle
-      var upperPaddle = nextPaddle.y + 95
+      var upperPaddle = this.nextPaddle().y + 95
       var topOf = this.y + 15
-      return topOf >= nextPaddle.y && topOf <= upperPaddle
+      return topOf >= this.nextPaddle().y && topOf <= upperPaddle
+    },
+    nextPaddle () {
+      return this.nextHit === 'left' ? this.leftPaddle : this.rightPaddle
     },
     pointScored () {
       return this.x <= -15 || this.x >= 650
@@ -93,6 +97,15 @@ export default {
     tally () {
       this.nextHit = this.nextHit === 'left' ? 'right' : 'left'
       this.$parent.score(this.nextHit)
+    },
+    deflect () {
+      console.log('ball: ' + this.y + ' paddle: ' + this.nextPaddle().y)
+      var pointOfContact = this.y + 7.5 - this.nextPaddle().y - 40
+      var slopeIndex = Math.ceil(Math.abs(pointOfContact / 10))
+      console.log(pointOfContact + ':' + slopeIndex)
+      slopeIndex = slopeIndex > 4 ? 4 : slopeIndex
+      this.direction.y = VALID_SLOPES[slopeIndex]
+      this.direction.y = pointOfContact < 0 ? -this.direction.y : this.direction.y
     }
   }
 }
