@@ -1,5 +1,8 @@
 <template>
-  <div class="table" @mousemove="move">
+  <div
+    class="table"
+    @mousemove="moveWithMouse($event)"
+    @mouseleave="bottomOrTop()">
     <div class="net"></div>
     <div class="scores">
       <span class="one">{{ scores[0] }}</span>
@@ -19,7 +22,6 @@ export default {
   name: 'table',
   data () {
     return {
-      moveId: null,
       scores: [0, 0],
       leftPaddle: {
         y: 200
@@ -42,17 +44,23 @@ export default {
       switch (e.keyCode) {
         case 38:
           if (this.leftPaddle.y < 400) {
-            this.leftPaddle.y += 20
-            this.rightPaddle.y += 20
+            this.leftPaddle.y += 40
           }
           break
         case 40:
           if (this.leftPaddle.y > 0) {
-            this.leftPaddle.y -= 20
-            this.rightPaddle.y -= 20
+            this.leftPaddle.y -= 40
           }
           break
       }
+    },
+    moveWithMouse (e) {
+      var newY = 480 - e.layerY
+      newY = newY > 400 ? 400 : newY
+      this.leftPaddle.y = newY
+    },
+    bottomOrTop () {
+      this.leftPaddle.y = this.leftPaddle.y >= 240 ? 400 : 0
     },
     score (paddle) {
       console.log('paddle ' + paddle + ' scored')
