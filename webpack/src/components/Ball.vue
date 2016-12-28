@@ -40,8 +40,8 @@ export default {
       }, 1)
     },
     update () {
-      var nextY = this.y + this.direction.y
-      var nextX = this.x + this.direction.x
+      var nextY = this.y + (1 * this.direction.y)
+      var nextX = this.x + (1 * this.direction.x)
 
       if (this.pointScored()) {
         window.clearInterval(this.intervalId)
@@ -56,36 +56,25 @@ export default {
           this.serve()
         }
       } else {
-        // upper wall
-        if (nextY >= 465) {
-          this.y = 465
+        // upper wall and lower walls
+        if (nextY >= 465 || nextY <= 0) {
           this.direction.y = -this.direction.y
         }
-        // lower wall
-        if (nextY <= 0) {
-          this.y = 0
-          this.direction.y = -this.direction.y
-        }
-        // left paddle
-        if (nextX <= 45 && this.x > 45 && this.willHit()) {
-          this.direction.x = 1
-          this.deflect()
-          this.nextHit = 'right'
-        }
-        // right paddle
-        if (nextX >= 590 && this.x < 590 && this.willHit()) {
-          this.direction.x = -1
-          this.deflect()
-          this.nextHit = 'left'
+        // paddles
+        var slope = (nextY - this.y) / (nextX - this.x)
+        var pointOfContact = this.pointOfContact(slope)
+        if (((nextX <= 45 && this.x > 45) || (nextX >= 590 && this.x < 590)) && this.willHit(pointOfContact)) {
+          this.deflect(pointOfContact)
         }
       }
 
-      this.x += this.direction.x
-      this.y += this.direction.y
+      this.x += (1 * this.direction.x)
+      this.y += (1 * this.direction.y)
+      this.rightPaddle.y = this.y > 400 ? 400 : this.y
     },
-    willHit () {
+    willHit (pointOfContact) {
       var upperPaddle = this.nextPaddle().y + 95
-      var topOf = this.y + 15
+      var topOf = pointOfContact + 15
       return topOf >= this.nextPaddle().y && topOf <= upperPaddle
     },
     nextPaddle () {
@@ -95,17 +84,30 @@ export default {
       return this.x <= -15 || this.x >= 650
     },
     tally () {
-      this.nextHit = this.nextHit === 'left' ? 'right' : 'left'
+      this.toggleNextHit()
       this.$parent.score(this.nextHit)
     },
-    deflect () {
-      console.log('ball: ' + this.y + ' paddle: ' + this.nextPaddle().y)
-      var pointOfContact = this.y + 7.5 - this.nextPaddle().y - 40
-      var slopeIndex = Math.ceil(Math.abs(pointOfContact / 10))
-      console.log(pointOfContact + ':' + slopeIndex)
+    deflect (pointOfContact) {
+      this.x = this.paddleX()
+      this.y = pointOfContact
+      var relativePoint = pointOfContact + 7.5 - 40 - this.nextPaddle().y
+      var slopeIndex = Math.ceil(Math.abs(relativePoint / 10))
       slopeIndex = slopeIndex > 4 ? 4 : slopeIndex
       this.direction.y = VALID_SLOPES[slopeIndex]
-      this.direction.y = pointOfContact < 0 ? -this.direction.y : this.direction.y
+      this.direction.y = relativePoint < 0 ? -this.direction.y : this.direction.y
+      this.direction.x = -this.direction.x
+      this.toggleNextHit()
+    },
+    toggleNextHit () {
+      this.nextHit = this.nextHit === 'left' ? 'right' : 'left'
+    },
+    paddleX () {
+      return this.nextHit === 'left' ? 45 : 590
+    },
+    pointOfContact (slope) {
+      var deltaX = this.paddleX() - this.x
+      var deltaY = slope * deltaX
+      return this.y + deltaY
     }
   }
 }
