@@ -22,6 +22,7 @@ export default {
   name: 'table',
   data () {
     return {
+      pongChannel: {},
       scores: [0, 0],
       leftPaddle: {
         y: 200
@@ -32,6 +33,12 @@ export default {
     }
   },
   created () {
+    var that = this
+    this.pongChannel = this.$parent.cable.subscriptions.create('PongChannel', {
+      received (data) {
+        that.leftPaddle.y = data.y
+      }
+    })
     window.addEventListener('keydown', this.move)
   },
   components: {
@@ -58,6 +65,7 @@ export default {
       var newY = 480 - e.layerY
       newY = newY > 400 ? 400 : newY
       this.leftPaddle.y = newY
+      this.pongChannel.send(this.leftPaddle)
     },
     bottomOrTop () {
       this.leftPaddle.y = this.leftPaddle.y >= 240 ? 400 : 0

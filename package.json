@@ -13,6 +13,7 @@
     "lint": "eslint --ext .js,.vue src webpack/test/unit/specs webpack/test/e2e/specs"
   },
   "dependencies": {
+    "actioncable": "^5.0.1",
     "vue": "^2.1.0"
   },
   "devDependencies": {

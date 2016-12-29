@@ -7,9 +7,16 @@
 
 <script>
 import Table from './components/Table'
+import ActionCable from 'actioncable'
+const cable = ActionCable.createConsumer('ws://localhost:28080')
 
 export default {
   name: 'app',
+  data () {
+    return {
+      cable: cable
+    }
+  },
   components: {
     'pong-table': Table
   }
