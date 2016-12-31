@@ -34,7 +34,7 @@ export default {
   },
   created () {
     var that = this
-    this.pongChannel = this.$parent.cable.subscriptions.create('PongChannel', {
+    this.pongChannel = this.$cable.subscriptions.create('PongChannel', {
       received (data) {
         that.leftPaddle.y = data.y
       }

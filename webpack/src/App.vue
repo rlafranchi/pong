@@ -1,24 +1,53 @@
 <template>
   <div id="app">
     <h1>Pong</h1>
-    <pong-table></pong-table>
+    <p>Welcome, {{ currentPlayer.name }}</p>
+    <div v-if="currentPlayer.id == null">
+      <input v-model="currentPlayer.name" type="text"/>
+      <button @click="createPlayer">Sign In</button>
+    </div>
+    <game-list :currentPlayer="currentPlayer" v-on:joined="joinGame"></game-list>
   </div>
 </template>
 
 <script>
-import Table from './components/Table'
-import ActionCable from 'actioncable'
-const cable = ActionCable.createConsumer('ws://localhost:28080')
+import GameList from './components/GameList'
 
 export default {
   name: 'app',
   data () {
     return {
-      cable: cable
+      error: null,
+      apiUrl: 'http://localhost:3000/api',
+      joined: false,
+      currentPlayer: {
+        id: null,
+        name: ''
+      }
     }
   },
   components: {
-    'pong-table': Table
+    'game-list': GameList
+  },
+  methods: {
+    createPlayer () {
+      var that = this
+      this.$http.post(this.apiUrl + '/players', {
+        player: {
+          name: this.currentPlayer.name
+        }
+      })
+      .then((res) => {
+        that.currentPlayer = res.data
+      })
+      .catch((e) => {
+        console.log(e.data.errors)
+        that.error = e.data.errors
+      })
+    },
+    joinGame () {
+      this.joined = true
+    }
   }
 }
 </script>

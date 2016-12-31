@@ -1,7 +1,7 @@
 module Api
   class GamesController < ApplicationController
     def index
-      render :json => Game.all
+      render :json => Game.all.to_json({:methods => [:left_player, :right_player]})
     end
 
     def create

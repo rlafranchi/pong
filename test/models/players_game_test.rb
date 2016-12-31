@@ -21,5 +21,11 @@ module Api
       assert_equal 1, PlayersGame.count
       assert_not_empty pg_double.errors
     end
+
+    test "should set game to playing when both have joined" do
+      pg_right = PlayersGame.create(game_id: @game.id, player_id: @bob.id, position: 'right')
+      pg_left = PlayersGame.create(game_id: @game.id, player_id: @alice.id, position: 'left')
+      assert @game.reload.playing?
+    end
   end
 end
