@@ -5,12 +5,12 @@
     @mouseleave="bottomOrTop()">
     <div class="net"></div>
     <div class="scores">
-      <span class="one">{{ scores[0] }}</span>
-      <span class="two">{{ scores[1] }}</span>
+      <span class="one">{{ game.left_player ? game.left_player.score : 0 }}</span>
+      <span class="two">{{ game.right_player ? game.right_player.score : 0 }}</span>
     </div>
     <paddle position="left" :paddle="leftPaddle"></paddle>
     <paddle position="right" :paddle="rightPaddle"></paddle>
-    <ball :leftPaddle="leftPaddle" :rightPaddle="rightPaddle"></ball>
+    <ball :game="game"></ball>
   </div>
 </template>
 
@@ -20,9 +20,11 @@ import Paddle from './Paddle'
 
 export default {
   name: 'table',
+  props: {
+    game: Object
+  },
   data () {
     return {
-      pongChannel: {},
       scores: [0, 0],
       leftPaddle: {
         y: 200
@@ -33,12 +35,6 @@ export default {
     }
   },
   created () {
-    var that = this
-    this.pongChannel = this.$cable.subscriptions.create('PongChannel', {
-      received (data) {
-        that.leftPaddle.y = data.y
-      }
-    })
     window.addEventListener('keydown', this.move)
   },
   components: {
@@ -47,7 +43,6 @@ export default {
   },
   methods: {
     move (e) {
-      e.preventDefault()
       switch (e.keyCode) {
         case 38:
           if (this.leftPaddle.y < 400) {
@@ -65,7 +60,6 @@ export default {
       var newY = 480 - e.layerY
       newY = newY > 400 ? 400 : newY
       this.leftPaddle.y = newY
-      this.pongChannel.send(this.leftPaddle)
     },
     bottomOrTop () {
       this.leftPaddle.y = this.leftPaddle.y >= 240 ? 400 : 0

@@ -1,9 +1,5 @@
 class PongChannel < ApplicationCable::Channel
   def subscribed
-    stream_from "pong_channel"
-  end
-
-  def receive(data)
-    ActionCable.server.broadcast "pong_channel", data
+    stream_from "pong_channel_#{params[:game_id]}"
   end
 end

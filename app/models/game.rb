@@ -4,6 +4,8 @@ class Game < ApplicationRecord
   has_many :players_games
   has_many :players, through: :players_games
 
+  after_update :play
+
   def left_player
     player(:left)
   end
@@ -32,6 +34,12 @@ class Game < ApplicationRecord
         self.id,
         PlayersGame.positions[position]
       ).first
+  end
+
+  def play
+    if playing?
+      PongJob.perform_now(self)
+    end
   end
 
 end

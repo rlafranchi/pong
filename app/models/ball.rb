@@ -139,7 +139,6 @@ class Ball
   end
 
   def broadcast
-    # TODO broadcast channel
-    Rails.logger.debug "x: #{@x}, y: #{@y}"
+    ActionCable.server.broadcast "pong_channel_#{@game.id}", { x: @x, y: @y }
   end
 end
