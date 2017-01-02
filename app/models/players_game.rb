@@ -5,14 +5,15 @@ class PlayersGame < ApplicationRecord
   validates :game_id, uniqueness: {scope: [:position]}
   validates :player_id, uniqueness: {scope: [:game_id]}
 
-  after_commit :update_game
+  after_save :update_game
 
   private
  
   def update_game
     if game.waiting? && game.players_games.count == 2
-      game.status = :playing
-      game.save
+      game.playing!
+    elsif game.playing? && score == 10
+      game.over!
     end
   end
 end

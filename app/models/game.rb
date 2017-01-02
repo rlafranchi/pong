@@ -12,6 +12,11 @@ class Game < ApplicationRecord
     player(:right)
   end
 
+  def score(position)
+    pg = players_games.find_by(position: position)
+    pg.increment(:score).save
+  end
+
   private
 
   def select_stmt
