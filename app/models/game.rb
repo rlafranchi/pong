@@ -4,7 +4,7 @@ class Game < ApplicationRecord
   has_many :players_games
   has_many :players, through: :players_games
 
-  after_update :play
+  after_commit :play
 
   def left_player
     player(:left)
@@ -38,7 +38,7 @@ class Game < ApplicationRecord
 
   def play
     if playing?
-      PongJob.perform_now(self)
+      PongJob.perform_later(self)
     end
   end
 

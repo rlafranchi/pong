@@ -1,4 +1,5 @@
 class Ball
+  attr_reader :next_hit
   TABLE_WIDTH = 650
   TABLE_HEIGHT = 480
   BALL_HEIGHT = 15
@@ -8,10 +9,11 @@ class Ball
 
   def initialize(game, next_hit=nil)
     @game = game
-    @difficulty = 1
+    @difficulty = 3
     @x = 318
     @y = 232
-    @next_hit ||= 'left'
+    next_hit ||= 'left'
+    @next_hit = next_hit
     @direction_x = nil
     @direction_y = nil
   end

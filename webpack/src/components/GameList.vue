@@ -3,18 +3,20 @@
     <thead>
       <tr>
         <th>Game</th>
-        <th>Players (left/right)</th>
+        <th>Left Player (score)</th>
+        <th>Right Player (score)</th>
         <th>Status</th>
       </tr>
     </thead>
     <tbody>
-      <tr v-for="game in games">
+      <tr v-for="game in gamesOrCurrent">
         <td>Game #{{ game.id }}</td>
         <td>
-          <span v-if="game.left_player">{{ game.left_player.name }}</span>
+          <span v-if="game.left_player">{{ game.left_player.name }} (<b>{{ game.left_player.score }}</b>)</span>
           <span v-else><button @click="join(game, 'left')" :disabled="currentGame">Join</button></span>
-          /
-          <span v-if="game.right_player">{{ game.right_player.name }}</span>
+        </td>
+        <td>
+          <span v-if="game.right_player">{{ game.right_player.name }} (<b>{{ game.right_player.score }}</b>)</span>
           <span v-else><button @click="join(game, 'right')" :disabled="currentGame">Join</button></span>
         </td>
         <td>{{ game.status }}</td>
@@ -23,7 +25,7 @@
         <td><button @click="newGame">+ Game</button></td>
       </tr>
     </tbody>
-    <pong-table v-if="currentGame" :game="currentGame"></pong-table>
+    <pong-table v-if="currentGame" :game="currentGame" :currentPlayer="currentPlayer"></pong-table>
   </table>
 </template>
 
@@ -36,6 +38,7 @@ export default {
   },
   data () {
     return {
+      gamesChannel: null,
       games: [],
       currentGame: null
     }
@@ -45,6 +48,34 @@ export default {
   },
   created () {
     this.fetchGames()
+    var that = this
+    this.$cable.subscriptions.create('GamesChannel', {
+      received (data) {
+        var gameIndex = that.games.map((game) => game.id).indexOf(data.id)
+        that.$set(that.games, gameIndex, data)
+        if (that.currentGame != null) {
+          if (data.id === that.currentGame.id) {
+            if (data.status === 'over') {
+              that.currentGame = null
+            } else {
+              that.currentGame = data
+            }
+          }
+        }
+      }
+    })
+  },
+  computed: {
+    gamesOrCurrent () {
+      var that = this
+      return this.games.filter((game) => {
+        if (that.currentGame != null && that.currentGame.id === game.id) {
+          return game
+        } else if (that.currentGame === null) {
+          return game
+        }
+      })
+    }
   },
   methods: {
     fetchGames () {

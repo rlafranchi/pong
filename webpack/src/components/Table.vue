@@ -21,11 +21,11 @@ import Paddle from './Paddle'
 export default {
   name: 'table',
   props: {
+    currentPlayer: Object,
     game: Object
   },
   data () {
     return {
-      scores: [0, 0],
       leftPaddle: {
         y: 200
       },
@@ -63,17 +63,6 @@ export default {
     },
     bottomOrTop () {
       this.leftPaddle.y = this.leftPaddle.y >= 240 ? 400 : 0
-    },
-    score (paddle) {
-      console.log('paddle ' + paddle + ' scored')
-      if (paddle === 'left') {
-        this.$set(this.scores, 0, this.scores[0] + 1)
-      } else {
-        this.$set(this.scores, 1, this.scores[1] + 1)
-      }
-    },
-    gameOver () {
-      return this.scores[0] === 10 || this.scores[1] === 10
     }
   }
 }

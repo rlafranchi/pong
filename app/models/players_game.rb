@@ -6,6 +6,7 @@ class PlayersGame < ApplicationRecord
   validates :player_id, uniqueness: {scope: [:game_id]}
 
   after_save :update_game
+  after_commit :broadcast_game
 
   private
  
@@ -15,5 +16,12 @@ class PlayersGame < ApplicationRecord
     elsif game.playing? && score == 10
       game.over!
     end
+  end
+
+  def broadcast_game
+    game_data = game.attributes
+    game_data["left_player"] = game.left_player
+    game_data["right_player"] = game.right_player
+    ActionCable.server.broadcast "games_channel", game_data
   end
 end
