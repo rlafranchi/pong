@@ -6,7 +6,7 @@
       <input v-model="currentPlayer.name" type="text"/>
       <button @click="createPlayer">Sign In</button>
     </div>
-    <game-list :currentPlayer="currentPlayer" v-on:joined="joinGame"></game-list>
+    <game-list v-if="currentPlayer.id != null" :currentPlayer="currentPlayer" v-on:joined="joinGame"></game-list>
   </div>
 </template>
 

@@ -8,5 +8,7 @@ class PongJob < ApplicationJob
       b.serve
       next_hit = b.next_hit
     end
+    $redis.del("left:#{game.id}")
+    $redis.del("right:#{game.id}")
   end
 end

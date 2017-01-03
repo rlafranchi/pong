@@ -16,3 +16,4 @@ selenium-debug.log
 .byebug_history
 
 *.swp
+dump.rdb

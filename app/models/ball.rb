@@ -97,13 +97,11 @@ class Ball
   end
 
   def left_paddle_y
-    # move to redis key value store
-    200
+    $redis.get("left:#{@game.id}").to_i || 200
   end
 
   def right_paddle_y
-    # move to redis key value store
-    200
+    $redis.get("right:#{@game.id}").to_i || 200
   end
 
   def paddle_x

@@ -78,11 +78,15 @@ export default {
     }
   },
   methods: {
-    fetchGames () {
+    fetchGames (current) {
       var that = this
       this.$http.get(this.$parent.apiUrl + '/games')
         .then((res) => {
           that.games = res.data
+          if (current) {
+            var gameIndex = that.games.map((game) => game.id).indexOf(current.id)
+            that.currentGame = that.games[gameIndex]
+          }
         })
     },
     newGame () {
@@ -96,13 +100,12 @@ export default {
       var that = this
       this.$http.post(this.$parent.apiUrl + '/players_games', {
         players_game: {
-          player_id: this.$parent.currentPlayer.id,
+          player_id: this.currentPlayer.id,
           game_id: game.id,
           position: position
         }
       }).then((res) => {
-        that.fetchGames()
-        that.currentGame = game
+        that.fetchGames(game)
       }).catch((e) => {
         that.$emit('error', e)
         console.log(e)
