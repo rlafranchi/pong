@@ -19,9 +19,6 @@ class PlayersGame < ApplicationRecord
   end
 
   def broadcast_game
-    game_data = game.attributes
-    game_data["left_player"] = game.left_player
-    game_data["right_player"] = game.right_player
-    ActionCable.server.broadcast "games_channel", game_data
+    game.broadcast
   end
 end

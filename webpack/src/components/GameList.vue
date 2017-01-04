@@ -9,7 +9,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="game in gamesOrCurrent">
+      <tr v-for="game in orderedGames">
         <td>Game #{{ game.id }}</td>
         <td>
           <span v-if="game.left_player">{{ game.left_player.name }} (<b>{{ game.left_player.score }}</b>)</span>
@@ -21,7 +21,7 @@
         </td>
         <td>{{ game.status }}</td>
       </tr>
-      <tr>
+      <tr v-if="currentGame === null">
         <td><button @click="newGame">+ Game</button></td>
       </tr>
     </tbody>
@@ -31,6 +31,7 @@
 
 <script>
 import Table from './Table'
+import _ from 'lodash'
 
 export default {
   props: {
@@ -52,12 +53,16 @@ export default {
     this.$cable.subscriptions.create('GamesChannel', {
       received (data) {
         var gameIndex = that.games.map((game) => game.id).indexOf(data.id)
-        that.$set(that.games, gameIndex, data)
+        if (gameIndex > -1) {
+          that.$set(that.games, gameIndex, data)
+        } else {
+          that.games.push(data)
+        }
         if (that.currentGame != null && data.id === that.currentGame.id) {
+          that.currentGame = data
           if (data.status === 'over') {
+            window.alert('Game Over!')
             that.currentGame = null
-          } else {
-            that.currentGame = data
           }
         }
       }
@@ -76,6 +81,9 @@ export default {
     },
     gamesNotOver () {
       return this.games.filter((game) => game.status !== 'over')
+    },
+    orderedGames () {
+      return _.orderBy(this.gamesOrCurrent, ['id'], ['desc'])
     }
   },
   methods: {
@@ -93,16 +101,12 @@ export default {
               ((game.left_player != null && game.left_player.id === that.currentPlayer.id) ||
               (game.right_player != null && game.right_player.id === that.currentPlayer.id))
             )
-            that.currentGame = current.id ? current : null
+            that.currentGame = current && current.id ? current : null
           }
         })
     },
     newGame () {
-      var that = this
       this.$http.post(this.$parent.apiUrl + '/games')
-        .then((res) => {
-          that.games.push(res.data)
-        })
     },
     join (game, position) {
       var that = this
@@ -115,7 +119,6 @@ export default {
       }).then((res) => {
         that.fetchGames(game)
       }).catch((e) => {
-        that.$emit('error', e)
         console.log(e)
       })
     }
