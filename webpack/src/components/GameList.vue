@@ -53,13 +53,11 @@ export default {
       received (data) {
         var gameIndex = that.games.map((game) => game.id).indexOf(data.id)
         that.$set(that.games, gameIndex, data)
-        if (that.currentGame != null) {
-          if (data.id === that.currentGame.id) {
-            if (data.status === 'over') {
-              that.currentGame = null
-            } else {
-              that.currentGame = data
-            }
+        if (that.currentGame != null && data.id === that.currentGame.id) {
+          if (data.status === 'over') {
+            that.currentGame = null
+          } else {
+            that.currentGame = data
           }
         }
       }
@@ -68,13 +66,16 @@ export default {
   computed: {
     gamesOrCurrent () {
       var that = this
-      return this.games.filter((game) => {
+      return this.gamesNotOver.filter((game) => {
         if (that.currentGame != null && that.currentGame.id === game.id) {
           return game
         } else if (that.currentGame === null) {
           return game
         }
       })
+    },
+    gamesNotOver () {
+      return this.games.filter((game) => game.status !== 'over')
     }
   },
   methods: {
@@ -86,6 +87,13 @@ export default {
           if (current) {
             var gameIndex = that.games.map((game) => game.id).indexOf(current.id)
             that.currentGame = that.games[gameIndex]
+          } else {
+            current = that.games.find(game =>
+              game.status !== 'over' &&
+              ((game.left_player != null && game.left_player.id === that.currentPlayer.id) ||
+              (game.right_player != null && game.right_player.id === that.currentPlayer.id))
+            )
+            that.currentGame = current.id ? current : null
           }
         })
     },
