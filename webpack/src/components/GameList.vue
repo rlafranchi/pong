@@ -1,32 +1,35 @@
 <template>
-  <table>
-    <thead>
-      <tr>
-        <th>Game</th>
-        <th>Left Player (score)</th>
-        <th>Right Player (score)</th>
-        <th>Status</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="game in orderedGames">
-        <td>Game #{{ game.id }}</td>
-        <td>
-          <span v-if="game.left_player">{{ game.left_player.name }} (<b>{{ game.left_player.score }}</b>)</span>
-          <span v-else><button @click="join(game, 'left')" :disabled="currentGame">Join</button></span>
-        </td>
-        <td>
-          <span v-if="game.right_player">{{ game.right_player.name }} (<b>{{ game.right_player.score }}</b>)</span>
-          <span v-else><button @click="join(game, 'right')" :disabled="currentGame">Join</button></span>
-        </td>
-        <td>{{ game.status }}</td>
-      </tr>
-      <tr v-if="currentGame === null">
-        <td><button @click="newGame">+ Game</button></td>
-      </tr>
-    </tbody>
-    <pong-table v-if="currentGame" :game="currentGame" :currentPlayer="currentPlayer"></pong-table>
-  </table>
+  <div>
+    <h3>Games</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Game</th>
+          <th>Left Player (score)</th>
+          <th>Right Player (score)</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-if="currentGame === null">
+          <td><button @click="newGame">+ Game</button></td>
+        </tr>
+        <tr v-for="game in orderedGames">
+          <td>Game #{{ game.id }}</td>
+          <td>
+            <span v-if="game.left_player">{{ game.left_player.name }} (<b>{{ game.left_player.score }}</b>)</span>
+            <span v-else><button @click="join(game, 'left')" :disabled="currentGame">Join</button></span>
+          </td>
+          <td>
+            <span v-if="game.right_player">{{ game.right_player.name }} (<b>{{ game.right_player.score }}</b>)</span>
+            <span v-else><button @click="join(game, 'right')" :disabled="currentGame">Join</button></span>
+          </td>
+          <td>{{ game.status }}</td>
+        </tr>
+      </tbody>
+      <pong-table v-if="currentGame" :game="currentGame" :currentPlayer="currentPlayer"></pong-table>
+    </table>
+  </div>
 </template>
 
 <script>

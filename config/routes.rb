@@ -4,5 +4,6 @@ Rails.application.routes.draw do
     resources :games, :except => [:show, :new, :edit]
     resources :players, :only => [:create]
     resources :players_games, :only => [:create]
+    resources :leaders, :only => [:index]
   end
 end

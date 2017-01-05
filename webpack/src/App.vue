@@ -6,12 +6,14 @@
       <input v-model="currentPlayer.name" type="text"/>
       <button @click="createPlayer">Sign In</button>
     </div>
+    <leader-board></leader-board>
     <game-list v-if="currentPlayer.id != null" :currentPlayer="currentPlayer" v-on:joined="joinGame"></game-list>
   </div>
 </template>
 
 <script>
 import GameList from './components/GameList'
+import LeaderBoard from './components/LeaderBoard'
 
 export default {
   name: 'app',
@@ -27,7 +29,8 @@ export default {
     }
   },
   components: {
-    'game-list': GameList
+    'game-list': GameList,
+    'leader-board': LeaderBoard
   },
   methods: {
     createPlayer () {
