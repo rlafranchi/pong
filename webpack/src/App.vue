@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <h1>Pong</h1>
+    <h3>Source on Github => <a href="https://github.com/rlafranchi/pong" target="_blank">rlafranchi/pong</a></h3>
     <p>Welcome, {{ currentPlayer.name }}</p>
     <div v-if="currentPlayer.id == null">
       <input v-model="currentPlayer.name" type="text"/>

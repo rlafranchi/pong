@@ -2,42 +2,31 @@
 
 > Pong reinvented using Rails and Vue.js
 
-## A Vue Webpack template forked from vuejs-templates/webpack
+This purpose of this app was to demonstrate the use of a progressive JavaScript framework [Vue.js](https://vuejs.org) and Rails ActionCable to build a two player pong game that can be played over the web.
 
-This template is intended for use with the Rails framework.  It is inteded to separate client and server and with Rails projects initialized using the --api flag.
+## Demo
 
-Simply setup a new rails project
+[https://vue-rails-pong.herokuapp.com](https://vue-rails-pong.herokuapp.com)
 
+## Rails Dev Setup
 ```bash
-rails new vue-rails --api
-```
-Make sure you have vue-cli installed and run the following using the same project name
+# run the migration
+rake db:migrate
 
-```bash
-vue init rlafranchi/webpack vue-rails
+# dev server
+rails server
 ```
 
-## Build Setup
+## Webpack Dev Setup
 
 ``` bash
-cd vue-rails
 # install dependencies
 npm install
 
 # serve with hot reload at localhost:8080
 npm run dev
-
-# build for production with minification
-npm run build
-
-# run unit tests
-npm run unit
-
-# run e2e tests
-npm run e2e
-
-# run all tests
-npm test
 ```
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## Production Setup
+
+The app is deployed to heroku using a nodejs buildpack and ruby buildpack.  A configuartion in package.json for "heroku-postbuild" which runs `npm run build` before starting the Rails server.
