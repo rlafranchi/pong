@@ -10,12 +10,8 @@ module Api
       Player.find_by_sql(%q{
         SELECT p.name,
                sum(pg.score) points,
-               count(pg.id) as total_games,
-               (SELECT count(pg1.id)
-                FROM players_games pg1
-                WHERE pg1.player_id = p.id
-                AND pg1.score = 10
-               ) as games_won
+               count(pg.id) total_games,
+               sum(case when pg.score = 10 then 1 else 0 end) games_won
         FROM players p
         LEFT JOIN players_games pg on pg.player_id = p.id
         GROUP BY p.name

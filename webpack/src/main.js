@@ -2,7 +2,7 @@ import Vue from 'vue'
 import App from './App'
 import ActionCable from 'actioncable'
 import axios from 'axios'
-const cable = ActionCable.createConsumer('ws://' + process.env.RAILS_URL.replace(/.*?:\/\//g, '') + '/cable')
+const cable = ActionCable.createConsumer('wss://' + process.env.RAILS_URL.replace(/.*?:\/\//g, '') + '/cable')
 
 Vue.prototype.$http = axios
 Vue.prototype.$cable = cable
