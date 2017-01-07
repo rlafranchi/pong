@@ -10,14 +10,13 @@
     "unit": "karma start webpack/test/unit/karma.conf.js --single-run",
     "e2e": "node webpack/test/e2e/runner.js",
     "test": "npm run unit && npm run e2e",
-    "lint": "eslint --ext .js,.vue src webpack/test/unit/specs webpack/test/e2e/specs"
+    "lint": "eslint --ext .js,.vue src webpack/test/unit/specs webpack/test/e2e/specs",
+    "heroku-postbuild": "npm run build"
   },
   "dependencies": {
     "actioncable": "^5.0.1",
     "axios": "^0.15.3",
-    "vue": "^2.1.0"
-  },
-  "devDependencies": {
+    "vue": "^2.1.0",
     "autoprefixer": "^6.4.0",
     "babel-core": "^6.0.0",
     "babel-eslint": "^7.0.0",

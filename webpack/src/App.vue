@@ -20,7 +20,7 @@ export default {
   data () {
     return {
       error: null,
-      apiUrl: 'http://localhost:3000/api',
+      apiUrl: process.env.RAILS_URL + '/api',
       joined: false,
       currentPlayer: {
         id: null,

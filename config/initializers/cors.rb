@@ -7,7 +7,11 @@
 
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
-    origins '*'
+    if Rails.env.production?
+      origins 'vue-rails-pong.herokuapp.com'
+    else
+      origins 'localhost:8080'
+    end
 
     resource '*',
       headers: :any,

@@ -63,6 +63,7 @@ GEM
     nio4r (1.2.1)
     nokogiri (1.7.0)
       mini_portile2 (~> 2.1.0)
+    pg (0.19.0)
     puma (3.6.2)
     rack (2.0.1)
     rack-cors (0.4.0)
@@ -85,6 +86,11 @@ GEM
       nokogiri (~> 1.6)
     rails-html-sanitizer (1.0.3)
       loofah (~> 2.0)
+    rails_12factor (0.0.3)
+      rails_serve_static_assets
+      rails_stdout_logging
+    rails_serve_static_assets (0.0.5)
+    rails_stdout_logging (0.0.5)
     railties (5.0.1)
       actionpack (= 5.0.1)
       activesupport (= 5.0.1)
@@ -123,9 +129,11 @@ PLATFORMS
 DEPENDENCIES
   byebug
   listen (~> 3.0.5)
+  pg
   puma (~> 3.0)
   rack-cors
   rails (~> 5.0.1, >= 5.0.1)
+  rails_12factor
   redis (~> 3.0)
   spring
   spring-watcher-listen (~> 2.0.0)

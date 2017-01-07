@@ -1,4 +1,4 @@
 module.exports = {
   NODE_ENV: '"production"',
-  RAILS_URL: '"http://api.example.com"'
+  RAILS_URL: '"https://vue-rails-pong.herokuapp.com"'
 }
