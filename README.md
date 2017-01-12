@@ -8,6 +8,16 @@ This purpose of this app was to demonstrate the use of a progressive JavaScript 
 
 [https://vue-rails-pong.herokuapp.com](https://vue-rails-pong.herokuapp.com)
 
+## The Basic Architecture when Playing a Game
+
+![Pong Architecture](Pong%20Diagram.png?raw=true)
+
+There also exists a GamesChannel which broadcasts every time a point is scored or a game changes state.
+
+## Latency issue
+
+There exists a latency issue where a paddle's position may be behind to it's true position at a point in time.  This may also exist with the ball's position as seen by the client.  I'm sure this is a common issue among multiplayer games, but have no experience in that department so am open to suggestions.
+
 ## Rails Dev Setup
 ```bash
 # run the migration
