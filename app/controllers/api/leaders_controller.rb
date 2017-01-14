@@ -15,7 +15,8 @@ module Api
         FROM players p
         LEFT JOIN players_games pg on pg.player_id = p.id
         GROUP BY p.name
-        ORDER BY p.name
+        ORDER BY sum(case when pg.score = 10 then 1 else 0 end) DESC, count(pg.id) DESC, sum(pg.score) DESC
+        LIMIT 5
       })
     end
   end

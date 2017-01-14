@@ -5,18 +5,18 @@
       <thead>
         <tr>
           <th>Player</th>
-          <th>PCT Won</th>
-          <th>Total Games</th>
           <th>Games Won</th>
+          <th>Total Games</th>
+          <th>PCT Won</th>
           <th>Points Scored</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="leader in orderedLeaders">
+        <tr v-for="leader in leaders">
           <td>{{ leader.name }}</td>
-          <td>{{ pctWon(leader) }}%</td>
-          <td>{{ leader.total_games }}</td>
           <td>{{ leader.games_won }}</td>
+          <td>{{ leader.total_games }}</td>
+          <td>{{ pctWon(leader) }}%</td>
           <td>{{ leader.points }}</td>
         </tr>
       </tbody>
@@ -25,7 +25,6 @@
 </template>
 
 <script>
-import _ from 'lodash'
 export default {
   data () {
     return {
@@ -40,22 +39,6 @@ export default {
       that.fetchLeaders()
     }, 5000)
   },
-  computed: {
-    orderedLeaders () {
-      var that = this
-      var ordered = _.orderBy(this.leaders, ['games_won', 'total_games', 'points'], ['desc', 'desc', 'desc'])
-      return ordered.filter((leader) => {
-        if (that.leaders.indexOf(leader) <= 4) {
-          return leader
-        }
-      })
-      // look at more accurate evaluation based on average points per game weighted based on number of games played
-      // var that = this
-      // return _.sortBy(that.leaders, (leader) => {
-      //   return [-that.pctWon(leader)]
-      // })
-    }
-  },
   methods: {
     fetchLeaders () {
       var that = this
@@ -65,7 +48,11 @@ export default {
         })
     },
     pctWon (leader) {
-      return Math.round(100 * (leader.games_won / leader.total_games))
+      if (leader.total_games > 0) {
+        return Math.round(100 * (leader.games_won / leader.total_games))
+      } else {
+        return 0
+      }
     }
   }
 }
