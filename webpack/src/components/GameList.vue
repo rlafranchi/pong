@@ -11,7 +11,15 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-if="currentGame === null">
+        <tr v-if="loading">
+          <td>
+            <span v-if="loadingIndex === 0">\</span>
+            <span v-if="loadingIndex === 1">|</span>
+            <span v-if="loadingIndex === 2">/</span>
+            <span v-if="loadingIndex === 3">-</span>
+          </td>
+        </tr>
+        <tr v-if="currentGame === null && !loading">
           <td><button @click="newGame">+ Game</button></td>
         </tr>
         <tr v-for="game in orderedGames">
@@ -44,7 +52,9 @@ export default {
     return {
       gamesChannel: null,
       games: [],
-      currentGame: null
+      currentGame: null,
+      loading: false,
+      loadingIndex: 0
     }
   },
   components: {
@@ -92,9 +102,14 @@ export default {
   methods: {
     fetchGames (current) {
       var that = this
+      var spinner = window.setInterval(() => {
+        that.loadingIndex = (that.loadingIndex + 1) % 4
+      }, 100)
+      this.loading = true
       this.$http.get(this.$parent.apiUrl + '/games')
         .then((res) => {
           that.games = res.data
+          that.clearSpinner(spinner)
           if (current) {
             var gameIndex = that.games.map((game) => game.id).indexOf(current.id)
             that.currentGame = that.games[gameIndex]
@@ -106,7 +121,14 @@ export default {
             )
             that.currentGame = current && current.id ? current : null
           }
+        }).catch((e) => {
+          that.clearSpinner(spinner)
+          console.log(e)
         })
+    },
+    clearSpinner (spinner) {
+      this.loading = false
+      window.clearInterval(spinner)
     },
     newGame () {
       this.$http.post(this.$parent.apiUrl + '/games')
