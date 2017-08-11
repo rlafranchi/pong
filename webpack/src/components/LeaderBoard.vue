@@ -35,9 +35,9 @@ export default {
     var that = this
     // polling Why not?
     that.fetchLeaders()
-    window.setInterval(() => {
-      that.fetchLeaders()
-    }, 5000)
+//    window.setInterval(() => {
+//      that.fetchLeaders()
+//    }, 5000)
   },
   methods: {
     fetchLeaders () {

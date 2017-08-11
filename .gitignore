@@ -17,3 +17,4 @@ selenium-debug.log
 
 *.swp
 dump.rdb
+.idea/
