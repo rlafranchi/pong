@@ -1,16 +1,23 @@
 <template>
-  <div
-    class="table"
-    @mousemove="moveWithMouse($event)"
-    @mouseleave="bottomOrTop()">
-    <div class="net"></div>
-    <div class="scores">
-      <span class="one">{{ game.left_player ? game.left_player.score : 0 }}</span>
-      <span class="two">{{ game.right_player ? game.right_player.score : 0 }}</span>
+  <div class="table" :class="currentPosition">
+    <svg
+      id="table-svg"
+      width="650"
+      height="480"
+      version="1.1"
+      xmlns="http://www.w3.org/2000/svg">
+      <rect width="100%" height="100%" fill="black"/>
+      <paddle position="left" :paddle="leftPaddle"></paddle>
+      <paddle position="right" :paddle="rightPaddle"></paddle>
+      <ball :game="game"></ball>
+    </svg>
+    <div id="table-catcher" @mousemove="moveWithMouse($event)" @mouseleave="bottomOrTop()">
+      <div class="net"></div>
+      <div class="scores">
+        <span class="one">{{ game.left_player ? game.left_player.score : 0 }}</span>
+        <span class="two">{{ game.right_player ? game.right_player.score : 0 }}</span>
+      </div>
     </div>
-    <paddle position="left" :paddle="leftPaddle"></paddle>
-    <paddle position="right" :paddle="rightPaddle"></paddle>
-    <ball :game="game"></ball>
   </div>
 </template>
 
@@ -76,7 +83,7 @@ export default {
     },
     moveWithMouse (e) {
       if (this.currentPosition != null) {
-        var newY = 480 - e.layerY
+        var newY = e.offsetY
         newY = newY > 400 ? 400 : newY
         this.currentPaddle().y = newY
         this.paddleChannel.send({y: this.currentPaddle().y})
@@ -111,7 +118,8 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .table {
-  position: absolute;
+  position: fixed;
+  top: 0;
   width: 650px;
   height: 480px;
   background-color: #000;
@@ -119,11 +127,35 @@ export default {
   font-weight: bold;
 }
 
+@media (max-width: 650px) {
+  .table .left {
+    left: 0;
+  }
+  .table .right {
+    right: 0;
+  }
+}
+
+#table-svg {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+
+#table-catcher {
+  position:absolute;
+  left:0px;
+  top:0px;
+  height:100%;
+  width:100%;
+}
+
 .net {
   width: 0px;
   border: 4px dotted #fff;
   height: 480px;
   margin-left: 320px;
+  z-index: 6;
 }
 
 .scores {
@@ -132,6 +164,7 @@ export default {
   top: 10px;
   color: #fff !important;
   font-size: 48px;
+  z-index: 5;
 }
 
 .scores .one {

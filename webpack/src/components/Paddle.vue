@@ -1,9 +1,5 @@
 <template>
-  <div
-    class="paddle"
-    :class="position"
-    v-bind:style="{ bottom: paddle.y + 'px' }">
-  </div>
+  <rect :x="position === 'left' ? '30' : '605'" :y="paddle.y" width="15" height="80" fill="white"/>
 </template>
 
 <script>

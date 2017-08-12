@@ -5,7 +5,7 @@ class Game < ApplicationRecord
   has_many :players, through: :players_games
 
   after_create :broadcast
-  after_commit :play
+  after_commit :play, :over
 
   def left_player
     player(:left)
@@ -51,6 +51,19 @@ class Game < ApplicationRecord
   def play
     if playing?
       PongJob.perform_later(self)
+    end
+  end
+
+  def over
+    if over?
+      players_games.each do |pg|
+        charge = StripeWrapper::Charge.create(pg.stripe_customer_id)
+        if charge.successful?
+          Rails.logger.debug "Charge succeeded"
+        else
+          Rails.logger.debug charge.error_message
+        end
+      end
     end
   end
 

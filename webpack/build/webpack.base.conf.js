@@ -12,7 +12,7 @@ var useCssSourceMap = cssSourceMapDev || cssSourceMapProd
 
 module.exports = {
   entry: {
-    app: './webpack/src/main.js'
+    app: ['babel-polyfill', './webpack/src/main.js']
   },
   output: {
     path: config.build.assetsRoot,

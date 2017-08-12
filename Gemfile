@@ -41,3 +41,4 @@ end
 
 gem 'stripe'
 gem 'sidekiq'
+gem 'newrelic_rpm'

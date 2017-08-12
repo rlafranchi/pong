@@ -9,11 +9,11 @@ class PlayersGame < ApplicationRecord
   after_commit :broadcast_game
 
   private
- 
+
   def update_game
     if game.waiting? && game.players_games.count == 2
       game.playing!
-    elsif game.playing? && score == 10
+    elsif game.playing? && score >= 10
       game.over!
     end
   end

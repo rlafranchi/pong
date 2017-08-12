@@ -64,6 +64,7 @@ GEM
     mini_portile2 (2.2.0)
     minitest (5.10.3)
     multipart-post (2.0.0)
+    newrelic_rpm (4.3.0.335)
     nio4r (2.1.0)
     nokogiri (1.8.0)
       mini_portile2 (~> 2.2.0)
@@ -142,6 +143,7 @@ PLATFORMS
 DEPENDENCIES
   byebug
   listen (~> 3.0.5)
+  newrelic_rpm
   pg
   puma (~> 3.0)
   rack-cors

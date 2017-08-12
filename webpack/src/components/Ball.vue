@@ -1,8 +1,9 @@
 <template>
-  <div
-    class="ball"
-    v-bind:style="{ bottom: y + 'px', left: x + 'px' }">
-  </div>
+  <!--<div-->
+    <!--class="ball"-->
+    <!--v-bind:style="{ bottom: y + 'px', left: x + 'px' }">-->
+  <!--</div>-->
+  <rect :x="x" :y="y" width="15" height="15" fill="white"/>
 </template>
 
 <script>
