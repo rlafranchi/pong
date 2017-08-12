@@ -57,11 +57,16 @@ class Game < ApplicationRecord
   def over
     if over?
       players_games.each do |pg|
-        charge = StripeWrapper::Charge.create(pg.stripe_customer_id)
-        if charge.successful?
-          Rails.logger.debug "Charge succeeded"
-        else
-          Rails.logger.debug charge.error_message
+        if pg.stripe_customer_id.present?
+          charge = StripeWrapper::Charge.create(pg.stripe_customer_id)
+          if charge.successful?
+            Rails.logger.debug "Charge succeeded"
+            # don't charge twice
+            pg.stripe_customer_id = nil
+            pg.save
+          else
+            Rails.logger.debug charge.error_message
+          end
         end
       end
     end

@@ -9,7 +9,7 @@ class Ball
 
   def initialize(game, next_hit=nil)
     @game = game
-    @difficulty = 3
+    @difficulty = 5
     @x = 318
     @y = 232
     next_hit ||= 'left'
