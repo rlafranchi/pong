@@ -60,7 +60,7 @@ class Ball
   def point_of_contact
     delta_x = paddle_x - @x
     delta_y = @direction_y * delta_x
-    @y + delta_y 
+    @y + delta_y
   end
 
   def deflect
@@ -97,11 +97,19 @@ class Ball
   end
 
   def left_paddle_y
-    $redis.get("left:#{@game.id}").to_i || 200
+    result = 200
+    $redis.with do |conn|
+      result = conn.get("left:#{@game.id}").to_i || result
+    end
+    return result
   end
 
   def right_paddle_y
-    $redis.get("right:#{@game.id}").to_i || 200
+    result = 200
+    $redis.with do |conn|
+      result = conn.get("right:#{@game.id}").to_i || result
+    end
+    return result
   end
 
   def paddle_x

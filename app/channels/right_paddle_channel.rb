@@ -4,7 +4,9 @@ class RightPaddleChannel < ApplicationCable::Channel
   end
 
   def receive(data)
-    $redis.set("right:#{params[:game_id]}", data["y"])
+    $redis.with do |conn|
+      conn.set("right:#{params[:game_id]}", data["y"])
+    end
     ActionCable.server.broadcast "left_paddle_channel_#{params[:game_id]}", data
   end
 end
