@@ -67,7 +67,7 @@ export default {
   created () {
     var that = this
     this.stripeHandler = StripeCheckout.configure({
-      key: 'pk_test_fI98pLJ5HlziNWAA56tW5QlT',
+      key: process.env.STRIPE_PK,
       image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
       locale: 'auto',
       token: function (token) {
