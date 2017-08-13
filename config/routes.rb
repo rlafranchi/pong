@@ -5,5 +5,6 @@ Rails.application.routes.draw do
     resources :players, :only => [:create]
     resources :players_games, :only => [:create]
     resources :leaders, :only => [:index]
+    resources :donations, :only => [:create]
   end
 end

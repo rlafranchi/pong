@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <h1>Pong: $1 per Game</h1>
+    <h1>Pong</h1>
     <a class="github-button" href="https://github.com/rlafranchi/pong" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star rlafranchi/pong on GitHub">Star</a>
     <p>Welcome, {{ currentPlayer.name }}</p>
     <div v-if="currentPlayer.id == null">

@@ -26,11 +26,11 @@
           <td>Game #{{ game.id }}</td>
           <td>
             <span v-if="game.left_player">{{ game.left_player.name }} (<b>{{ game.left_player.score }}</b>)</span>
-            <span v-else><button @click="openCheckout(game, 'left')" :disabled="currentGame">Join</button></span>
+            <span v-else><button @click="join(game, 'left')" :disabled="currentGame">Join</button></span>
           </td>
           <td>
             <span v-if="game.right_player">{{ game.right_player.name }} (<b>{{ game.right_player.score }}</b>)</span>
-            <span v-else><button @click="openCheckout(game, 'right')" :disabled="currentGame">Join</button></span>
+            <span v-else><button @click="join(game, 'right')" :disabled="currentGame">Join</button></span>
           </td>
           <td>{{ game.status }}</td>
         </tr>
@@ -56,9 +56,7 @@ export default {
       currentGame: null,
       loading: false,
       loadingIndex: 0,
-      stripeHandler: null,
-      proposedGame: null,
-      proposedPosition: null
+      stripeHandler: null
     }
   },
   components: {
@@ -71,7 +69,7 @@ export default {
       image: 'https://stripe.com/img/documentation/checkout/marketplace.png',
       locale: 'auto',
       token: function (token) {
-        that.join(token.id)
+        that.donate(token.id)
       }
     })
     this.fetchGames()
@@ -86,8 +84,7 @@ export default {
         if (that.currentGame != null && data.id === that.currentGame.id) {
           that.currentGame = data
           if (data.status === 'over') {
-            window.alert('Game Over!')
-            that.currentGame = null
+            that.openCheckout()
           }
         }
       }
@@ -145,29 +142,50 @@ export default {
     newGame () {
       this.$http.post(this.$parent.apiUrl + '/games')
     },
-    openCheckout (game, position) {
-      this.proposedGame = game
-      this.proposedPosition = position
+    openCheckout () {
       this.stripeHandler.open({
-        name: 'Pong',
-        description: 'A single game of Pong',
+        name: this.name(),
+        description: this.description(),
         amount: 100,
-        currency: 'usd'
+        currency: 'usd',
+        'panel-label': 'Donate {{amount}}'
       })
     },
-    join (tokenId) {
+    join (game, position) {
       var that = this
       this.$http.post(this.$parent.apiUrl + '/players_games', {
         players_game: {
           player_id: this.currentPlayer.id,
-          game_id: that.proposedGame.id,
-          position: that.proposedPosition
-        },
-        stripe_token: tokenId
+          game_id: game.id,
+          position: position
+        }
       }).then((res) => {
-        that.fetchGames(that.proposedGame)
+        that.fetchGames(game)
       }).catch((e) => {
         console.log(e)
+      })
+    },
+    description () {
+      return `Game #${this.currentGame.id}: ${this.currentGame.left_player.name} - ${this.currentGame.left_player.score} : ${this.currentGame.right_player.name} - ${this.currentGame.right_player.score}`
+    },
+    name () {
+      return `Support Pong`
+    },
+    donate (tokenId) {
+      var that = this
+      this.$http.post(this.$parent.apiUrl + '/donations', {
+        donation: {
+          source: tokenId,
+          description: that.description(),
+          currency: 'usd',
+          amount: 100
+        }
+      }).then((res) => {
+        that.currentGame = null
+        window.alert('Thanks for the Dontaion!')
+      }).catch((e) => {
+        that.currentGame = null
+        console.error(e)
       })
     }
   }
