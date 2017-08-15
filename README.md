@@ -6,7 +6,7 @@ This purpose of this app was to demonstrate the use of a progressive JavaScript 
 
 ## Demo
 
-Just over 500 free games have been played on the demo.  Having built quite a few side projects and tutorials, I decided it is time to start charging.  If you found this helpful in any way, support the project by playing a game for $1.00 and invite your friends:
+Just over 500 games have been played on the demo.  I decided to request a $1 donation at the end of the game.  If you found this helpful in any way, support the project by playing a game for $1.00 and invite your friends:
 
 [https://vue-rails-pong.herokuapp.com](https://vue-rails-pong.herokuapp.com)
 
