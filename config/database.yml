@@ -20,6 +20,7 @@ test:
   <<: *default
   database: db/test.sqlite3
 
+#  url:  <%= ENV["HEROKU_POSTGRESQL_YELLOW_URL"] %>
 production:
-  url:  <%= ENV["HEROKU_POSTGRESQL_YELLOW_URL"] %>
+  url: <%= ENV["DATABASE_URL"] %>
   pool: <%= ENV["DB_POOL"] || ENV['RAILS_MAX_THREADS'] || 5 %>
