@@ -153,7 +153,6 @@ export default {
       this.$http.post(this.$parent.apiUrl + '/games')
         .then((res) => { that.error = null })
         .catch((err) => {
-          debugger
           that.error = err.response.data.error
         })
     },
