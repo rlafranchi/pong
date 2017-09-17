@@ -19,6 +19,9 @@
             <span v-if="loadingIndex === 3">-</span>
           </td>
         </tr>
+        <tr v-if="error">
+          <td style="color:red;">{{ error }}</td>
+        </tr>
         <tr v-if="currentGame === null && !loading">
           <td><button @click="newGame">+ Game</button></td>
         </tr>
@@ -56,7 +59,8 @@ export default {
       currentGame: null,
       loading: false,
       loadingIndex: 0,
-      stripeHandler: null
+      stripeHandler: null,
+      error: null
     }
   },
   components: {
@@ -70,6 +74,10 @@ export default {
       locale: 'auto',
       token: function (token) {
         that.donate(token.id)
+      },
+      closed: function () {
+        that.currentGame = null
+        that.fetchGames()
       }
     })
     this.fetchGames()
@@ -140,7 +148,14 @@ export default {
       window.clearInterval(spinner)
     },
     newGame () {
+      const that = this
+      that.error = null
       this.$http.post(this.$parent.apiUrl + '/games')
+        .then((res) => { that.error = null })
+        .catch((err) => {
+          debugger
+          that.error = err.response.data.error
+        })
     },
     openCheckout () {
       this.stripeHandler.open({
