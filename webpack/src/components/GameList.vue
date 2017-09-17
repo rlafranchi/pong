@@ -113,7 +113,7 @@ export default {
       return this.games.filter((game) => game.status !== 'over')
     },
     orderedGames () {
-      return _.orderBy(this.gamesOrCurrent, ['id'], ['desc'])
+      return _.orderBy(this.gamesOrCurrent, ['id'], ['asc'])
     }
   },
   methods: {
