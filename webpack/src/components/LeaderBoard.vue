@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>Leader Board</h3><a href="!#" @click="fetchLeaders()">refresh</a>
+    <h3>Leader Board</h3><a href="#" @click="fetchLeaders()">refresh</a>
     <table>
       <thead>
         <tr>
